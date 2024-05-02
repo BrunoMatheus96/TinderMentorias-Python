@@ -2,6 +2,12 @@ from fastapi import FastAPI
 
 from src.core.router import router
 
-app = FastAPI()
 
-app.include_router(router, prefix='/api')
+def build_api() -> FastAPI:
+    application = FastAPI()
+
+    application.include_router(router, prefix='/api')
+
+    return application
+
+app = build_api()
