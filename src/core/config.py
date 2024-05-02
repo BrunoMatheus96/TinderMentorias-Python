@@ -1,12 +1,15 @@
-
 from functools import lru_cache
 
-from pydantic.v1 import BaseSettings
+from pydantic_settings import BaseSettings
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
     #Caso o LOG_LEVEL nãoo esteja definido dentro do .env ele vai utilizar o valo 'info'
-    log_level: str = "info"
+    LOG_LEVEL: str = "info"
 
 
 class Config:

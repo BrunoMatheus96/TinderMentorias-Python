@@ -15,7 +15,7 @@ class ApiLogger(logging.Logger):
         self.setLevel(self._get_log_level())
 
     def _get_log_level(self):
-        level = get_settings().log_level
+        level = get_settings().LOG_LEVEL
 
         if level == 'debug':
             return logging.DEBUG
