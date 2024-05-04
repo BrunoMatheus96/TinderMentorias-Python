@@ -8,7 +8,7 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    #Caso o LOG_LEVEL nãoo esteja definido dentro do .env ele vai utilizar o valo 'info'
+    #Caso o LOG_LEVEL não esteja definido dentro do .env ele vai utilizar o valo 'info'
     LOG_LEVEL: str = "info"
 
 

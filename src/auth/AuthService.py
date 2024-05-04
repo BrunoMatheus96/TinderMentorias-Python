@@ -1,10 +1,10 @@
 from fastapi import HTTPException
 
-from src.auth.dto import Login
+from src.auth.AuthDTO import LoginDTO
 
 
 class AuthService:
-    def login(self, dto: Login):
+    def login(self, dto: LoginDTO):
         if not (dto.login == 'admin@admin.com' and dto.password == 'teste123'):
             raise HTTPException(400, 'Login ou senha inválida')
         return {'message': 'Login realizado com sucesso'}

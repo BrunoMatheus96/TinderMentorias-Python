@@ -1,6 +1,6 @@
 import logging
 
-from src.core.config import get_settings
+from src.core.Config import get_settings
 
 
 class ApiLogger(logging.Logger):
