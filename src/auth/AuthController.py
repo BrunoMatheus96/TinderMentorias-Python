@@ -16,7 +16,7 @@ async def login_de_usuario(dto: LoginDTO):
     return authService.login(dto)
 
 
-@router.post('/register', response_description="Rota para criar um novo Usuário.")
+@router.post('/register',status_code=201, response_description="Rota para criar um novo Usuário.")
 async def cadastro_de_usuario(dto: RegisterDTO, userService: UserService = Depends(UserService)):
 
     return await userService.user_register(dto)

@@ -1,6 +1,7 @@
+import re
 from typing import List
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 class RegisterDTO(BaseModel):
@@ -8,7 +9,7 @@ class RegisterDTO(BaseModel):
     lastName: str = Field(..., min_length=3)
     email: EmailStr
     cep: str = Field(..., min_length=8, max_length=8)
-    password: str
-    position: str
-    skills: List
-    photo: str = 'Arquivo (pnj, jpg, etc)'
+    password: str = Field(..., min_length=6)
+    position: str = Field(..., min_length=1)
+    skills: List = Field(..., max_items=5)
+    photo: str

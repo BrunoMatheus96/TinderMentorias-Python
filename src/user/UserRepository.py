@@ -3,7 +3,7 @@ from decouple import config
 
 from src.core.util.AuthUtil import AuthUtil
 from src.core.util.ConverterUtil import ConverterUtil
-from src.user.UserModel import UserModel
+from src.user.UserModel import NewUserModel
 
 #Conexão com MongoDB
 MONGO_URL = config('DATABASEMONGODB_URL')
@@ -19,7 +19,7 @@ authUtil = AuthUtil()
 
 
 class UserRepository:
-    async def create_user(self, user: UserModel) -> UserModel:
+    async def create_user(self, user: NewUserModel) -> NewUserModel:
         user.password = authUtil.encrypted_password(user.password) #Criptografando a senha
 
         user_dict = {
@@ -39,7 +39,7 @@ class UserRepository:
 
         return converterUtil.user_converter(new_user)
 
-    async def search_for_user_by_email(self, email: str) -> UserModel:
+    async def search_for_user_by_email(self, email: str) -> NewUserModel:
         user = await user_collection.find_one({"email": email})
 
         if user:

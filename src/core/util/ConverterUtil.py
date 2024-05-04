@@ -1,9 +1,9 @@
-from src.user.UserModel import UserModel
+from src.user.UserModel import NewUserModel
 
 
 class ConverterUtil:
     def user_converter(self, user):
-        return UserModel(
+        return NewUserModel(
             id=str(user["_id"]),
             name=user["name"],
             lastName=user["lastName"],
