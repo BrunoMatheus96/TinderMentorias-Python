@@ -1,6 +1,7 @@
 import motor.motor_asyncio
 from decouple import config
 
+from src.core.util.AuthUtil import AuthUtil
 from src.core.util.ConverterUtil import ConverterUtil
 from src.user.UserModel import UserModel
 
@@ -14,10 +15,13 @@ database = client.tinderMentoria
 user_collection = database.get_collection("user")
 
 converterUtil = ConverterUtil()
+authUtil = AuthUtil()
 
 
 class UserRepository:
     async def create_user(self, user: UserModel) -> UserModel:
+        user.password = authUtil.encrypted_password(user.password) #Criptografando a senha
+
         user_dict = {
             "name": user.name,
             "lastName": user.lastName,
