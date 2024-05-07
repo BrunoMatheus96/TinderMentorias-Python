@@ -1,30 +1,19 @@
 from typing import List
 
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, EmailStr
 
 
 class UserModel(BaseModel):
-    name: str = Field(...)
-    lastName: str = Field(...)
-    email: EmailStr = Field(...)
-    cep: str = Field(...)
-    password: str = Field(...)
-    position: str = Field(...)
-    skills: List = Field(...)
-    photo: str = Field(...)
+    id: str
+    name: str
+    lastName: str
+    email: EmailStr
+    cep: str
+    password: str
+    position: str
+    skills: List
+    photo: str
+    token: str = None
 
-
-class NewUserModel(BaseModel):
-    name: str = Field(...)
-    lastName: str = Field(...)
-    email: EmailStr = Field(...)
-    cep: str = Field(...)
-    password: str = Field(...)
-    position: str = Field(...)
-    skills: List = Field(...)
-    photo: str = Field(...)
-
-
-class UserLoginModel(BaseModel):
-    email: EmailStr = Field(...)
-    password: str = Field(...)
+    def __getitem__(self, item):
+        return getattr(self, item)

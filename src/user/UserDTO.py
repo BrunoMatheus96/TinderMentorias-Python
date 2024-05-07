@@ -1,6 +1,7 @@
 import re
 from typing import List
 
+from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr, Field, validator
 
 
@@ -12,4 +13,4 @@ class RegisterDTO(BaseModel):
     password: str = Field(..., min_length=6)
     position: str = Field(..., min_length=1)
     skills: List = Field(..., max_items=5)
-    photo: str
+    photo: UploadFile

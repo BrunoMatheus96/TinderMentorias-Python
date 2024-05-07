@@ -1,9 +1,9 @@
-from src.user.UserModel import NewUserModel
+from src.user.UserModel import UserModel
 
 
 class ConverterUtil:
     def user_converter(self, user):
-        return NewUserModel(
+        return UserModel(
             id=str(user["_id"]),
             name=user["name"],
             lastName=user["lastName"],
@@ -12,5 +12,5 @@ class ConverterUtil:
             password=user["password"],
             position=user["position"],
             skills=user["skills"],
-            photo=user["photo"] if "foto" in user else "",
+            photo=user["photo"] if "photo" in user else "",
         )

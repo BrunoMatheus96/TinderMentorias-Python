@@ -1,10 +1,56 @@
+import time
+
+import jwt
+from decouple import config
 from fastapi import HTTPException
 
 from src.auth.AuthDTO import LoginDTO
+from src.core.util.AuthUtil import AuthUtil
+from src.core.util.ResponseDTO import ResponseDTO
+from src.user.UserRepository import UserRepository
+from src.user.UserService import UserService
+
+JWT_SECRET = config('JWT_SECRET')
+
+userRepository = UserRepository()
+
+authUtil = AuthUtil()
+
+userService = UserService()
 
 
 class AuthService:
-    def login(self, dto: LoginDTO):
-        if not (dto.login == 'admin@admin.com' and dto.password == 'teste123'):
-            raise HTTPException(400, 'Login ou senha inválida')
-        return {'message': 'Login realizado com sucesso'}
+
+    def create_token_jwt(self, user_id: str) -> str:
+        payload = {
+            "user_id": user_id,
+            "expiration_time": time.time() + 6000
+        }
+
+        token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+        return token
+
+    def decode_token_jwt(self, token: str):
+        try:
+            token_decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+
+            if token_decoded["expiration_time"] >= time.time():
+                return token_decoded
+            else:
+                return None
+        except Exception as e:
+            print(e)
+            return None
+
+    async def login(self, login_dto: LoginDTO):
+        user_found = await userRepository.search_for_user_by_email(login_dto.login)
+        print(user_found)
+
+        if not user_found:
+            raise HTTPException(status_code=401, detail='E-mail ou Senha incorretos! Tente novamente, por favor.')
+        else:
+            if authUtil.check_password(login_dto.password, user_found.password):
+                return ResponseDTO('Login realizado com sucesso', user_found, 200)
+            else:
+                raise HTTPException(status_code=401, detail='Usuário não cadastrado')
