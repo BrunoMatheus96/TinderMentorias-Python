@@ -13,7 +13,6 @@ class UserModel(BaseModel):
     position: str
     skills: List
     photo: str
-    token: str = None
 
     def __getitem__(self, item):
         return getattr(self, item)

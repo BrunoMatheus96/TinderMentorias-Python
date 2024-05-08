@@ -1,9 +1,9 @@
 import motor.motor_asyncio
-from bson import ObjectId
 from decouple import config
 
 from src.core.util.AuthUtil import AuthUtil
 from src.core.util.ConverterUtil import ConverterUtil
+from src.user.UserDTO import RegisterDTO
 from src.user.UserModel import UserModel
 
 #Conexão com MongoDB
@@ -20,7 +20,7 @@ authUtil = AuthUtil()
 
 
 class UserRepository:
-    async def create_user(self, user: UserModel) -> UserModel:
+    async def create_user(self, user: RegisterDTO, url_photo: str) -> UserModel:
         user.password = authUtil.encrypted_password(user.password)  #Criptografando a senha
 
         user_dict = {
@@ -30,7 +30,8 @@ class UserRepository:
             "cep": user.cep,
             "password": user.password,
             "position": user.position,
-            "skills": user.skills
+            "skills": user.skills,
+            "photo": url_photo
         }
 
         create_user = await user_collection.insert_one(user_dict)
@@ -44,20 +45,3 @@ class UserRepository:
 
         if user:
             return converterUtil.user_converter(user)
-
-    async def update_user(self, id: str, user_data: dict) -> UserModel:
-        if "password" in user_data:
-            user_data['password'] = authUtil.encrypted_password(user_data['password'])
-
-        user = await user_collection.find_one({'_id': ObjectId(id)})
-
-        if user:
-            await user_collection.update_one(
-                {"_id": ObjectId(id)}, {"$set": user_data}
-            )
-
-            founded_user = await user_collection.find_one({
-                "_id": ObjectId(id)
-            })
-
-            return converterUtil.user_converter(founded_user)

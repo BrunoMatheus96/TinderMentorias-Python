@@ -12,5 +12,5 @@ class ConverterUtil:
             password=user["password"],
             position=user["position"],
             skills=user["skills"],
-            photo=user["photo"] if "photo" in user else "",
+            photo=user["photo"]
         )

@@ -24,7 +24,7 @@ class AuthService:
     def create_token_jwt(self, user_id: str) -> str:
         payload = {
             "user_id": user_id,
-            "expiration_time": time.time() + 6000
+            #"expiration_time": time.time() + 6000 -> Faz com que o tokem mude sempre
         }
 
         token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
@@ -51,6 +51,7 @@ class AuthService:
             raise HTTPException(status_code=401, detail='E-mail ou Senha incorretos! Tente novamente, por favor.')
         else:
             if authUtil.check_password(login_dto.password, user_found.password):
-                return ResponseDTO('Login realizado com sucesso', user_found, 200)
+                token = self.create_token_jwt(user_found.id)
+                return ResponseDTO('Login realizado com sucesso', token, 200)
             else:
                 raise HTTPException(status_code=401, detail='Usuário não cadastrado')
