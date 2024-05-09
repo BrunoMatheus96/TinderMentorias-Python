@@ -19,7 +19,7 @@ class UserService:
         has_special_char = any(char in special_characters for char in user.password)
         has_digit = any(char.isdigit() for char in user.password)
         if not has_special_char or not has_digit:
-            raise HTTPException(status_code=400, detail="A senha deve conter letra, número e caracter especial")
+            raise HTTPException(400, "A senha deve conter letra, número e caracter especial")
 
         try:
             user_found = await userRepository.search_for_user_by_email(user.email)
@@ -27,7 +27,7 @@ class UserService:
             if user_found:
                 print(user_found)
                 os.remove(photo_path)
-                raise HTTPException(status_code=400, detail=f'O email {user.email} já está cadastrado no sistema')
+                raise HTTPException(400, f'O email {user.email} já está cadastrado no sistema')
             else:
 
                 try:
@@ -38,10 +38,10 @@ class UserService:
                 except Exception as e:
                     print(e)
 
-                return {'message': 'Cadastro realizado com sucesso!'}
+                return {'detail': 'Cadastro realizado com sucesso!'}
 
         except HTTPException as http_exception:
             raise http_exception
         except Exception as e:
             print(e)
-            raise HTTPException(status_code=500, detail="Erro interno no servidor")
+            raise HTTPException(500, "Erro interno no servidor")

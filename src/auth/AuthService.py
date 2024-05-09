@@ -48,10 +48,10 @@ class AuthService:
         print(user_found)
 
         if not user_found:
-            raise HTTPException(status_code=401, detail='Usuário não cadastrado')
+            raise HTTPException(401, 'Dados inválidos ou não cadastrados')
         else:
             if authUtil.check_password(login_dto.password, user_found.password):
                 token = self.create_token_jwt(user_found.id)
                 return ResponseDTO('Login realizado com sucesso', token, 200)
             else:
-                raise HTTPException(status_code=401, detail='E-mail ou Senha incorretos! Tente novamente, por favor.')
+                raise HTTPException(401, 'Dados inválidos')

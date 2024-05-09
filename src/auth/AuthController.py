@@ -16,7 +16,7 @@ userService = UserService()
 
 @router.post('/login', responses={
     200: {"model": str, "description": "Login realizado com sucesso",
-          "content": {"application/json": {"example": {"mensagem": "string", "dados": "string", "status": 200}}}},
+          "content": {"application/json": {"example": {"detail": "string", "dados": "string", "status": 200}}}},
     401: {"model": str, "description": "Usuário não autorizado",
           "content": {"application/json": {"example": {"detail": "string"}}}}
 })
@@ -29,7 +29,7 @@ async def login_de_usuario(login_dto: LoginDTO = Body(...)):
 
 @router.post('/register', status_code=201, responses={
     201: {"model": str, "description": "Login realizado com sucesso",
-          "content": {"application/json": {"example": {"mensagem": "string"}}}},
+          "content": {"application/json": {"example": {"detail": "string"}}}},
     400: {"model": str, "description": "Usuário não autorizado",
           "content": {"application/json": {"example": {"detail": "string"}}}}
 })
