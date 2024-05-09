@@ -1,10 +1,10 @@
 import os
+from datetime import datetime
 
 from fastapi import HTTPException
 from src.user.UserDTO import RegisterDTO
 from src.user.UserRepository import UserRepository
 from src.auth.providers.AWSProvider import AWSProvider
-from src.core.util.ConverterUtil import ConverterUtil
 
 userRepository = UserRepository()
 
@@ -30,10 +30,8 @@ class UserService:
                 raise HTTPException(status_code=400, detail=f'O email {user.email} já está cadastrado no sistema')
             else:
 
-                id_user = ConverterUtil.user_converter
-
                 try:
-                    url_photo = awsProvider.upload_file_s3(f'photo-perfil/{id_user}.jpg', photo_path)
+                    url_photo = awsProvider.upload_file_s3(f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
 
                     await userRepository.create_user(user, url_photo)
 
