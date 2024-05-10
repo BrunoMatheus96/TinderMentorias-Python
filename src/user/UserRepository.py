@@ -31,6 +31,7 @@ class UserRepository:
             "password": user.password,
             "position": user.position,
             "skills": user.skills,
+            "interests": user.interests,
             "photo": url_photo
         }
 

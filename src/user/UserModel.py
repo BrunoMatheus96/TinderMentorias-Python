@@ -12,6 +12,7 @@ class UserModel(BaseModel):
     password: str
     position: str
     skills: List
+    interests: List
     photo: str
 
     def __getitem__(self, item):

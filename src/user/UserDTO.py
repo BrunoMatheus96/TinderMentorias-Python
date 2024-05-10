@@ -18,3 +18,4 @@ class RegisterDTO(BaseModel):
     password: str = Field(..., min_length=6)
     position: str = Field(..., min_length=1)
     skills: List = Field(..., max_items=5)
+    interests: List = Field(..., max_items=5)
