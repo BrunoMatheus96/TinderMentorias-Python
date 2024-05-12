@@ -11,7 +11,7 @@ authService = AuthService()
 userService = UserService()
 
 
-@router.put('/upload_user', tags=['Usuários'])
+@router.put('/upload_user', dependencies=[Depends(check_token)], tags=['Usuários'])
 async def atualizar_dados_do_usuario():
 
     return 'Ta funcionando'
