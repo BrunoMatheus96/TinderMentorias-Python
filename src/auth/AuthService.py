@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from src.auth.AuthDTO import LoginDTO
 from src.core.util.AuthUtil import AuthUtil
 from src.core.util.ResponseDTO import ResponseDTO
+from src.user.UserModel import UserModel
 from src.user.UserRepository import UserRepository
 from src.user.UserService import UserService
 
@@ -34,11 +35,8 @@ class AuthService:
     def decode_token_jwt(self, token: str):
         try:
             token_decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+            return token_decoded
 
-            if token_decoded["expiration_time"] >= time.time():
-                return token_decoded
-            else:
-                return None
         except Exception as e:
             print(e)
             return None
@@ -55,3 +53,13 @@ class AuthService:
                 return ResponseDTO('Login realizado com sucesso', token, 200)
             else:
                 raise HTTPException(401, 'Dados inválidos')
+
+    async def search_user_logged(self, authorization: str) -> UserModel:
+        token = authorization.split(' ')[1]
+        payload = self.decode_token_jwt(token)
+
+        registered_user = await userService.find_user(payload['user_id'])
+
+        user_logged = registered_user.dados
+
+        return user_logged

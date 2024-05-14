@@ -1,4 +1,5 @@
 import motor.motor_asyncio
+from bson import ObjectId
 from decouple import config
 
 from src.core.util.AuthUtil import AuthUtil
@@ -46,3 +47,22 @@ class UserRepository:
 
         if user:
             return converterUtil.user_converter(user)
+
+    async def search_for_user_by_id(self, id: str) -> UserModel:
+        user = await user_collection.find_one({"_id": ObjectId(id)})
+
+        if user:
+            return converterUtil.user_converter(user)
+
+    async def update_user(self, id: str, user_data: dict) -> UserModel:
+        if 'password' in user_data:
+            user_data['password'] = authUtil.encrypted_password(user_data['password'])
+
+        user = await user_collection.find_one({'_id': ObjectId(id)})
+
+        if user:
+            await user_collection.update_one({'_id': ObjectId(id)}, {'$set': user_data})
+
+            finded_user = await user_collection.find_one({'_id': ObjectId(id)})
+
+            return converterUtil.user_converter(finded_user)
