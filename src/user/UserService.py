@@ -33,7 +33,8 @@ class UserService:
             else:
 
                 try:
-                    url_photo = awsProvider.upload_file_s3(f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
+                    url_photo = awsProvider.upload_file_s3(
+                        f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
 
                     await userRepository.create_user(user, url_photo)
 
@@ -60,9 +61,20 @@ class UserService:
             if find_user:
                 user_dict = update_user.__dict__
 
-                updated_user = await userRepository.update_user(id, user_dict)
+                try:
+                    '''
+                    url_photo = awsProvider.upload_file_s3(
+                        f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
 
-                return ResponseDTO('Usuário atualizado com sucesso', updated_user, 200)
+                    await userRepository.update_user(update_user, url_photo)
+                    '''
+
+                    updated_user = await userRepository.update_user(id, user_dict)
+
+                    return ResponseDTO('Dados atualizados com sucesso', updated_user, 200)
+
+                except Exception as e:
+                    print(e)
 
         except Exception as e:
             print(e)

@@ -12,9 +12,26 @@ userService = UserService()
 
 
 @router.put('/upload_user', dependencies=[Depends(check_token)], tags=['Usuários'])
-async def atualizar_dados_do_usuario(authorization: str = Header(default=''), update_user: UpdateUserDTO = Depends(UpdateUserDTO)):
+async def atualizar_dados_do_usuario(authorization: str = Header(default=''),
+                                     update_user: UpdateUserDTO = Depends(UpdateUserDTO)):
+    try:
+        user_logged = await authService.search_user_logged(authorization)
 
-    user_logged = await authService.search_user_logged(authorization)
-    result = await userService.update_user(user_logged.id, update_user)
+        '''
+        if not ('.jpg' in file.filename or '.jpeg' in file.filename or '.png' in file.filename):
+            raise HTTPException(400, 'Formato do arquivo incorreto')
 
-    return result
+        photo_path = f'src/files/photo-{datetime.now().strftime("%d%m%y%H%M%S")}.jpg'
+
+        with open(photo_path, 'wb+') as photo_file:
+            photo_file.write(file.file.read())
+            
+            '''
+        result = await userService.update_user(user_logged.id, update_user)
+
+        # os.remove(photo_path)
+
+        return result
+
+    except Exception as e:
+        raise e

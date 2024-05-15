@@ -55,6 +55,7 @@ class UserRepository:
             return converterUtil.user_converter(user)
 
     async def update_user(self, id: str, user_data: dict) -> UserModel:
+
         if 'password' in user_data:
             user_data['password'] = authUtil.encrypted_password(user_data['password'])
 
