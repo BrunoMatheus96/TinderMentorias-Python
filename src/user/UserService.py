@@ -33,7 +33,8 @@ class UserService:
             else:
 
                 try:
-                    url_photo = awsProvider.upload_file_s3(f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
+                    url_photo = awsProvider.upload_file_s3(
+                        f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
 
                     await userRepository.create_user(user, url_photo)
 
@@ -54,6 +55,14 @@ class UserService:
         return ResponseDTO('Usuário encontrado', finded_user, 200)
 
     async def update_user(self, id, update_user: UpdateUserDTO):
+
+        # Validações da senha DTO
+        special_characters = "!@#$%^&*()-_+=<>,.?/:;{}[]|\\~"
+        has_special_char = any(char in special_characters for char in update_user.password)
+        has_digit = any(char.isdigit() for char in update_user.password)
+        if not has_special_char or not has_digit:
+            raise HTTPException(400, "A senha deve conter letra, número e caracter especial")
+
         try:
             find_user = await userRepository.search_for_user_by_id(id)
 
@@ -74,6 +83,8 @@ class UserService:
 
                 except Exception as e:
                     print(e)
+                    raise HTTPException(500, "Erro interno no servidor")
 
         except Exception as e:
             print(e)
+            raise HTTPException(500, "Erro interno no servidor")
