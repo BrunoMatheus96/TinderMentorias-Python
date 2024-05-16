@@ -54,7 +54,7 @@ class UserService:
 
         return ResponseDTO('Usuário encontrado', finded_user, 200)
 
-    async def update_user(self, id, update_user: UpdateUserDTO):
+    async def update_user(self, id, update_user: UpdateUserDTO, photo_path):
 
         # Validações da senha DTO
         special_characters = "!@#$%^&*()-_+=<>,.?/:;{}[]|\\~"
@@ -70,12 +70,15 @@ class UserService:
                 user_dict = update_user.__dict__
 
                 try:
-                    '''
+                    photo = find_user.photo[61:]
+                    awsProvider.delete_file_S3(photo)
+
                     url_photo = awsProvider.upload_file_s3(
                         f'photo-perfil/{datetime.now().strftime("%d%m%y%H%M%S")}.jpg', photo_path)
 
-                    await userRepository.update_user(update_user, url_photo)
-                    '''
+                    user_dict['photo'] = url_photo
+
+                    #await userRepository.update_user(id, {'photo': url_photo})
 
                     updated_user = await userRepository.update_user(id, user_dict)
 

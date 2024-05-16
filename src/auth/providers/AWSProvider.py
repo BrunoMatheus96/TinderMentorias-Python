@@ -28,3 +28,25 @@ class AWSProvider:
         except ClientError as erro:
             print(erro)
             return False
+
+    def delete_file_S3(self, photo):
+
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=config('AWS_ACCESS_KEY'),
+            aws_secret_access_key=config('AWS_SECRET_KEY'),
+            region_name='us-east-2'
+        )
+
+        try:
+            response = s3_client.delete_object(
+                Bucket='tinde-mentoria-devaria',
+                Key=f'photo-perfil/{photo}',
+
+            )
+
+            print(response)
+        except ClientError as erro:
+            print(erro)
+            return False
+
