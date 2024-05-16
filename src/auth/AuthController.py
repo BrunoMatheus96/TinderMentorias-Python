@@ -39,7 +39,7 @@ async def cadastro_de_usuario(file: UploadFile, register_dto: RegisterDTO = Depe
         if not ('.jpg' in file.filename or '.jpeg' in file.filename or '.png' in file.filename):
             raise HTTPException(400, 'Formato do arquivo incorreto')
 
-        photo_path = f'src/files/photo-{datetime.now().strftime("%d%m%y%H%M%S")}.jpg'
+        photo_path = f'photo-{datetime.now().strftime("%d%m%y%H%M%S")}.jpg'
 
         with open(photo_path, 'wb+') as photo_file:
             photo_file.write(file.file.read())
